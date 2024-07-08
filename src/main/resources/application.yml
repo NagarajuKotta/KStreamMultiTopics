@@ -1,0 +1,48 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: KStreamMultiTopics
+  profiles:
+    active: test
+
+---
+spring:
+  profile: test
+  main:
+    allow-bean-definition-overriding: true
+  kafka:
+    source-topic1: demo.employee
+    source-topic2: demo.client
+    source-topic3: demo.project
+    destination-topic: demo.employeeinfo
+    bootstrap-servers: localhost:8080
+    properties:
+      schema:
+        registry:
+          url: http//localhost:8081
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: SCRAM-SHA-256
+        jaas:
+          config: org.apache.kafka.common.security.scram.ScramLoginModule required username="username" password="Password";
+    producer:
+      retries: 2
+      acks: all
+      properties:
+        min:
+          in-sync:
+            replicas: 2
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    streams:
+      application-id: demo.kntest
+      bootstrap-servers: localhost:8080
+      default:
+        key-serde: org.apache.kafka.common.serialization.StringSerde
+        value-serde: org.apache.kafka.common.serialization.StringSerde
+      replication-factor: 3
+      auto-offset-reset: earliest
+
