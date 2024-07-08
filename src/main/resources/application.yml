@@ -16,7 +16,7 @@ spring:
     source-topic2: demo.client
     source-topic3: demo.project
     destination-topic: demo.employeeinfo
-    bootstrap-servers: localhost:8080
+    bootstrap-servers: localhost:8080  //can be changed according to bootstrap server configured
     properties:
       schema:
         registry:
